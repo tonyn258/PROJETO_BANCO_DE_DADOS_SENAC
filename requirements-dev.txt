@@ -1,0 +1,19 @@
+# =============================================================================
+# requirements-dev.txt — Dependências de Desenvolvimento (Opcionais)
+# =============================================================================
+#
+# Ferramentas úteis para o desenvolvimento do projeto.
+# Não são obrigatórias para executar o sistema.
+#
+# Instalar com:
+#   pip install -r requirements-dev.txt
+# =============================================================================
+
+# Verificador de estilo de código (PEP 8)
+pycodestyle==2.11.1
+
+# Análise estática de código (detecta erros antes de executar)
+pyflakes==3.2.0
+
+# Formatador automático de código Python
+autopep8==2.3.1

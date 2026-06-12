@@ -1,0 +1,96 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+
+class CLIENTE << (E,#ADD1B2) >> {
+  id
+  nome
+  email
+  telefone
+}
+
+class PEDIDO << (E,#ADD1B2) >> {
+  id
+  descricao
+  valor
+  data
+  cliente_id
+}
+
+diamond REALIZA
+
+CLIENTE -- REALIZA : 1
+REALIZA -- PEDIDO : N
+
+@enduml
+
+
+@startuml
+
+entity "CLIENTES" as clientes {
+    * id : INT <<PK>>
+    --
+    nome : VARCHAR(100)
+    email : VARCHAR(100)
+    telefone : VARCHAR(20)
+}
+
+entity "PEDIDOS" as pedidos {
+    * id : INT <<PK>>
+    --
+    cliente_id : INT <<FK>>
+    descricao : VARCHAR(255)
+    valor : DECIMAL(10,2)
+    data : DATE
+}
+
+clientes ||--o{ pedidos : realiza
+
+@enduml
+
+@startuml
+
+skinparam backgroundColor white
+skinparam shadowing false
+
+rectangle "CLIENTES" as Clientes
+rectangle "PEDIDOS" as Pedidos
+
+hexagon "REALIZA" as Realiza
+
+Clientes -- Realiza : 1
+Realiza -- Pedidos : N
+
+@enduml
+
+
+
+@startuml
+
+start
+
+:Cadastrar cliente;
+:Inserir registro em CLIENTES;
+
+:Selecionar produtos;
+:Criar pedido;
+
+if (Confirmar pedido?) then (Sim)
+
+    :Inserir registro em PEDIDOS;
+    :Vincular cliente_id;
+    :Finalizar;
+
+else (Cancelar)
+
+    :Encerrar processo;
+
+endif
+
+stop
+
+@enduml
+
+
+
+
