@@ -14,7 +14,7 @@ class PEDIDO << (E,#ADD1B2) >> {
   descricao
   valor
   data
-  cliente_id
+  cliente_ID
 }
 
 diamond REALIZA
@@ -38,7 +38,7 @@ entity "CLIENTES" as clientes {
 entity "PEDIDOS" as pedidos {
     * id : INT <<PK>>
     --
-    cliente_id : INT <<FK>>
+    cliente_ID : INT <<FK>>
     descricao : VARCHAR(255)
     valor : DECIMAL(10,2)
     data : DATE
@@ -78,7 +78,7 @@ start
 if (Confirmar pedido?) then (Sim)
 
     :Inserir registro em PEDIDOS;
-    :Vincular cliente_id;
+    :Vincular cliente_ID;
     :Finalizar;
 
 else (Cancelar)

@@ -24,8 +24,8 @@ print(m.listar())
 # um INSERT na tabela tb_clientes.
 #
 cliente = ClienteModel(
-    nome="Lucas Banco",
-    email="lucas@email.com",
+    nome="Mario",
+    email="Mario@email.com",
     telefone="31 9 9999 9999"
 )
 

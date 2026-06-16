@@ -8,21 +8,44 @@ Verifique o status do repositório:
 git status
 ```
 
-Adicionar todas as alterações:
+Executar tudo em um único comando:
+
+```bash
+git add . && git commit -m "Atualização do projeto" && git push origin master
+```
+
+Ou executar passo a passo:
 
 ```bash
 git add .
+git commit -m "Atualização do projeto"
+git push origin master
 ```
+## 1.1 Enviar apenas um arquivo específico para o GitHub
 
-Criar um commit:
+Adicionar apenas um arquivo:
 
 ```bash
-git commit -m "Atualização do projeto"
+git add nome_do_arquivo
+```
+
+Criar o commit:
+
+```bash
+git commit -m "Descrição das alterações feitas"
 ```
 
 Enviar para o GitHub:
 
 ```bash
+git push origin master
+```
+
+Exemplo:
+
+```bash
+git add comandos_git.md
+git commit -m "Atualiza documentação Git"
 git push origin master
 ```
 
@@ -74,8 +97,21 @@ git branch
 
 ---
 
-## 5. Ver histórico de commits
+## 5. Verificar o status do projeto
+
+```bash
+git status
+```
+
+---
+
+## 6. Ver histórico de commits
 
 ```bash
 git log --oneline -5
+
+
 ```
+
+
+

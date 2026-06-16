@@ -22,11 +22,11 @@
 # TABELA ESPERADA NO BANCO:
 #   CREATE TABLE pedidos (
 #       id         INT            AUTO_INCREMENT PRIMARY KEY,
-#       cliente_id INT            NOT NULL,
+#       clientes_ID INT            NOT NULL,
 #       descricao  VARCHAR(255)   NOT NULL,
 #       valor      DECIMAL(10, 2) NOT NULL,
 #       data       DATE           NOT NULL,
-#       FOREIGN KEY (cliente_id) REFERENCES clientes(id)
+#       FOREIGN KEY (clientes_ID) REFERENCES clientes(id)
 #   );
 #
 # RELACIONAMENTO:
@@ -48,7 +48,7 @@ class PedidoModel:
 
     Atributos:
         id (int):          Chave primária — gerada automaticamente.
-        cliente_id (int):  Chave estrangeira → clientes.id (NOT NULL).
+        clientes_ID (int):  Chave estrangeira → clientes.id (NOT NULL).
         descricao (str):   Descrição do produto/serviço pedido (NOT NULL).
         valor (float):     Valor total do pedido em reais (NOT NULL).
         data (str):        Data do pedido no formato 'AAAA-MM-DD' (NOT NULL).
@@ -57,13 +57,13 @@ class PedidoModel:
     def __init__(
         self,
         id: Optional[int] = None,
-        cliente_id: Optional[int] = None,
+        clientes_ID: Optional[int] = None,
         descricao: str = "",
         valor: float = 0.0,
         data: str = "",
     ) -> None:
         self.id = id
-        self.cliente_id = cliente_id
+        self.clientes_ID = clientes_ID
         self.descricao = descricao
         self.valor = valor
         self.data = data
@@ -76,22 +76,17 @@ class PedidoModel:
         sql = """
             INSERT INTO tb_pedidos
             (
-                cliente_id,
+                clientes_ID,
                 descricao,
                 valor,
                 data
             )
             VALUES
-            (
-                %s,
-                %s,
-                %s,
-                %s
-            )
+            (%s,%s,%s,%s)
         """
 
         parametros = (
-            self.cliente_id,
+            self.clientes_ID,
             self.descricao,
             self.valor,
             self.data
@@ -121,7 +116,7 @@ class PedidoModel:
                 p.data
             FROM tb_pedidos p
             INNER JOIN tb_clientes c
-                ON p.cliente_id = c.ID_clientes
+                ON p.clientes_ID  = c.ID_clientes
             ORDER BY p.data DESC
         """
 
@@ -143,44 +138,7 @@ class PedidoModel:
             }
             for r in registros
         ]
-    def salvar(self) -> bool:
-        """
-        Persiste um novo pedido no banco de dados.
-        """
-
-        sql = """
-            INSERT INTO tb_pedidos
-            (
-                cliente_id,
-                descricao,
-                valor,
-                data
-            )
-            VALUES
-            (
-                %s,
-                %s,
-                %s,
-                %s
-            )
-        """
-
-        parametros = (
-            self.cliente_id,
-            self.descricao,
-            self.valor,
-            self.data
-        )
-
-        db = ConexaoBD()
-
-        db.abrir_conexao()
-
-        db.executar_query(sql, parametros)
-
-        db.fechar_conexao()
-
-        return True
+    
 
     def atualizar(self) -> bool:
         """
@@ -190,7 +148,7 @@ class PedidoModel:
         sql = """
             UPDATE tb_pedidos
             SET
-                cliente_id = %s,
+                clientes_ID = %s,
                 descricao = %s,
                 valor = %s,
                 data = %s
@@ -198,7 +156,7 @@ class PedidoModel:
         """
 
         parametros = (
-            self.cliente_id,
+            self.clientes_ID,
             self.descricao,
             self.valor,
             self.data,
@@ -237,7 +195,7 @@ class PedidoModel:
 
         return True
 
-    #def listar_por_cliente(self, cliente_id: int) -> List[Dict[str, Any]]:
+    #def listar_por_cliente(self, clientes_ID: int) -> List[Dict[str, Any]]:
     def buscar_por_id(self, id: int):
         """
         Retorna todos os pedidos de um cliente específico.
@@ -254,13 +212,13 @@ class PedidoModel:
                     p.valor,
                     p.data
                 FROM pedidos p
-                INNER JOIN clientes c ON p.cliente_id = c.id
-                WHERE p.cliente_id = %s
+                INNER JOIN clientes c ON p.clientes_ID = c.id
+                WHERE p.clientes_ID = %s
                 ORDER BY p.data DESC
             \"\"\"
             db = Conexao()
             db.abrir_conexao()
-            registros = db.buscar_todos(sql, (cliente_id,))
+            registros = db.buscar_todos(sql, (clientes_ID,))
             db.fechar_conexao()
             return [...]
 
@@ -269,7 +227,7 @@ class PedidoModel:
         Útil para exibir o histórico de pedidos de um cliente específico.
 
         Args:
-            cliente_id: ID do cliente cujos pedidos serão buscados.
+            clientes_ID: ID do cliente cujos pedidos serão buscados.
 
         Returns:
             List[Dict]: Lista de pedidos do cliente.
@@ -278,7 +236,7 @@ class PedidoModel:
             NotImplementedError: Até que os alunos implementem.
         """
         # raise NotImplementedError(
-        #     "Implemente listar_por_cliente() com SELECT ... WHERE cliente_id = %s."
+        #     "Implemente listar_por_cliente() com SELECT ... WHERE clientes_ID = %s."
         # )
         """
     Busca um pedido pelo ID.
@@ -287,7 +245,7 @@ class PedidoModel:
         sql = """
             SELECT
                 ID_pedidos,
-                cliente_id,
+                clientes_ID,
                 descricao,
                 valor,
                 data
@@ -306,7 +264,7 @@ class PedidoModel:
         if registro:
             return {
                 "id": registro[0],
-                "cliente_id": registro[1],
+                "clientes_ID": registro[1],
                 "descricao": registro[2],
                 "valor": float(registro[3]),
                 "data": str(registro[4])
@@ -315,4 +273,4 @@ class PedidoModel:
         return None
 
     def __repr__(self) -> str:
-        return f"PedidoModel(id={self.id!r}, cliente_id={self.cliente_id!r})"
+        return f"PedidoModel(id={self.id!r}, clientes_ID={self.clientes_ID!r})"

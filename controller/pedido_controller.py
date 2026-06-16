@@ -3,6 +3,7 @@
 # Antônio
 # Leonardo
 # Julinha
+# Victor Gabriel
 #####################################################################
 
 # =============================================================================
@@ -13,13 +14,13 @@
 # RESPONSABILIDADE:
 #   Intermediar a comunicação entre PedidoView e PedidoModel.
 #   Gerenciar o relacionamento entre Pedidos e Clientes:
-#   popular o Combobox de clientes e vincular o cliente_id ao salvar.
+#   popular o Combobox de clientes e vincular o clientes_ID ao salvar.
 #
 # FLUXO PRINCIPAL:
 #   1. Ao carregar a tela → busca clientes para o Combobox
 #   2. Usuário seleciona cliente, preenche campos, clica em "Salvar"
 #   3. Controller valida dados e chama PedidoModel.salvar()
-#   4. O banco cria o vínculo via FOREIGN KEY (cliente_id)
+#   4. O banco cria o vínculo via FOREIGN KEY (clientes_ID)
 #   5. Controller atualiza a tabela (com JOIN cliente + pedido)
 # =============================================================================
 
@@ -27,7 +28,9 @@ from tkinter import messagebox
 from typing import List
 
 from model.pedido_model import PedidoModel
+from model.cliente_model import ClienteModel
 from view.pedido_view import PedidoView
+
 
 
 # -----------------------------------------------------------------------------
@@ -64,7 +67,7 @@ class PedidoController:
     Controller da tela de Pedidos.
 
     Além do CRUD padrão, gerencia o relacionamento N:1 com Clientes:
-    popula o Combobox e obtém o cliente_id para persistência.
+    popula o Combobox e obtém o clientes_ID para persistência.
     """
 
     def __init__(self, view: PedidoView) -> None:
@@ -96,29 +99,16 @@ class PedidoController:
             ao_limpar=self._ao_clicar_limpar,
         )
 
+
     def _carregar_clientes_combobox(self) -> None:
         """
-        Popula o Combobox de clientes da tela de Pedidos.
-
-        PONTO EDUCACIONAL:
-        O Combobox exibe os NOMES dos clientes, mas internamente
-        armazena os IDs. Ao salvar um pedido, usamos o ID (cliente_id)
-        como FOREIGN KEY na tabela 'pedidos'.
-
-        ATIVIDADE DOS ALUNOS:
-        Após implementar ClienteModel.listar(), substituir a importação
-        mockada pela chamada ao model de clientes:
-
-            from model.cliente_model import ClienteModel
-            model_cliente = ClienteModel()
-            clientes = model_cliente.listar()
-            self.view.definir_clientes_combobox(clientes)
+        Carrega os clientes do banco e popula o Combobox.
         """
-        # Importação tardia evita dependência circular entre controllers
-        from controller.cliente_controller import CLIENTES_MOCK
 
-        # TODO (Alunos): substituir pela chamada ao ClienteModel.listar()
-        clientes = [{"id": c[0], "nome": c[1]} for c in CLIENTES_MOCK]
+        model_cliente = ClienteModel()
+
+        clientes = model_cliente.listar()
+
         self.view.definir_clientes_combobox(clientes)
 
     def _carregar_dados(self) -> None:
@@ -184,15 +174,18 @@ class PedidoController:
         Valida os dados e salva um novo pedido.
 
         PONTO EDUCACIONAL:
-        O campo 'cliente_id' é a FOREIGN KEY que vincula o pedido
+        O campo 'clientes_ID' é a FOREIGN KEY que vincula o pedido
         ao cliente. Ao chamar self.model.salvar(), o banco validará
-        automaticamente que o cliente_id existe na tabela 'clientes'.
+        automaticamente que o clientes_ID existe na tabela 'clientes'.
 
         ATIVIDADE DOS ALUNOS:
         Após implementar PedidoModel.salvar(), substituir o bloco
         mockado pelo seguinte:
 
-            self.model.cliente_id = dados["cliente_id"]
+            print("DADOS:", dados)
+            print("CLIENTE ID:", dados["clientes_ID"])
+
+            self.model.clientes_ID = dados["clientes_ID"]
             self.model.descricao  = dados["descricao"]
             self.model.valor      = valor_float
             self.model.data       = dados["data"]
@@ -207,6 +200,7 @@ class PedidoController:
                 self.view.definir_status(f"Erro: {e}", "erro")
         """
         dados = self.view.obter_dados_formulario()
+        print(dados)
 
         # --- Validações ---
         if not dados["cliente_nome"]:
@@ -250,20 +244,28 @@ class PedidoController:
             return
 
         # TODO (Alunos): substituir pelo bloco descrito na docstring acima
-        novo = [
-            self._proximo_id,
-            dados["cliente_nome"],
-            dados["descricao"],
-            valor_float,
-            dados["data"],
-        ]
-        PEDIDOS_MOCK.append(novo)
-        self._proximo_id += 1
+        self.model.clientes_ID = dados["clientes_ID"]
+        self.model.descricao = dados["descricao"]
+        self.model.valor = valor_float
+        self.model.data = dados["data"]
 
-        self._carregar_dados()
-        self.view.limpar_formulario()
-        self.view.definir_status("Pedido salvo com sucesso!", "sucesso")
+        try:
+            sucesso = self.model.salvar()
 
+            if sucesso:
+                self._carregar_dados()
+                self.view.limpar_formulario()
+                self.view.definir_status(
+                    "Pedido salvo com sucesso!",
+                    "sucesso"
+                )
+
+        except Exception as e:
+            self.view.definir_status(
+                f"Erro: {e}",
+                "erro"
+            )
+            
     def _ao_clicar_atualizar(self) -> None:
         """
         Valida e atualiza os dados do pedido selecionado.
@@ -273,7 +275,7 @@ class PedidoController:
         mockado pelo seguinte:
 
             self.model.id         = int(dados["id"])
-            self.model.cliente_id = dados["cliente_id"]
+            self.model.clientes_ID = dados["clientes_ID"]
             self.model.descricao  = dados["descricao"]
             self.model.valor      = valor_float
             self.model.data       = dados["data"]
@@ -307,19 +309,28 @@ class PedidoController:
             return
 
         # TODO (Alunos): substituir pelo bloco descrito na docstring acima
-        id_upd = int(dados["id"])
-        for i, p in enumerate(PEDIDOS_MOCK):
-            if p[0] == id_upd:
-                PEDIDOS_MOCK[i] = [
-                    id_upd, dados["cliente_nome"],
-                    dados["descricao"], valor_float, dados["data"],
-                ]
-                break
+        self.model.id = int(dados["id"])
+        self.model.clientes_ID = dados["clientes_ID"]
+        self.model.descricao = dados["descricao"]
+        self.model.valor = valor_float
+        self.model.data = dados["data"]
 
-        self._carregar_dados()
-        self.view.limpar_formulario()
-        self.view.definir_status("Pedido atualizado com sucesso!", "sucesso")
+        try:
+            sucesso = self.model.atualizar()
 
+            if sucesso:
+                self._carregar_dados()
+                self.view.limpar_formulario()
+                self.view.definir_status(
+                    "Pedido atualizado com sucesso!",
+                    "sucesso"
+                )
+
+        except Exception as e:
+            self.view.definir_status(
+                f"Erro: {e}",
+                "erro"
+            )
     def _ao_clicar_excluir(self) -> None:
         """
         Solicita confirmação e exclui o pedido selecionado.
@@ -356,13 +367,29 @@ class PedidoController:
             return
 
         # TODO (Alunos): substituir pelo bloco descrito na docstring acima
-        id_del = int(dados["id"])
-        PEDIDOS_MOCK[:] = [p for p in PEDIDOS_MOCK if p[0] != id_del]
+        self.model.id = int(dados["id"])
 
-        self._carregar_dados()
-        self.view.limpar_formulario()
-        self.view.definir_status(f"Pedido #{id_del} excluído.", "info")
+        try:
 
+            sucesso = self.model.excluir()
+
+            if sucesso:
+
+                self._carregar_dados()
+
+                self.view.limpar_formulario()
+
+                self.view.definir_status(
+                    "Pedido excluído com sucesso!",
+                    "info"
+                )
+
+        except Exception as e:
+
+            self.view.definir_status(
+                f"Erro: {e}",
+                "erro"
+            )
     def _ao_clicar_limpar(self) -> None:
         """Limpa o formulário sem alterar dados."""
         self.view.limpar_formulario()

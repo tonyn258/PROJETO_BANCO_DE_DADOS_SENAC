@@ -232,11 +232,11 @@ CREATE TABLE clientes (
 -- Tabela de Pedidos (com FOREIGN KEY para Clientes)
 CREATE TABLE pedidos (
     id         INT            AUTO_INCREMENT PRIMARY KEY,
-    cliente_id INT            NOT NULL,
+    cliente_ID INT            NOT NULL,
     descricao  VARCHAR(255)   NOT NULL,
     valor      DECIMAL(10, 2) NOT NULL,
     data       DATE           NOT NULL,
-    FOREIGN KEY (cliente_id) REFERENCES clientes(id)
+    FOREIGN KEY (cliente_ID) REFERENCES clientes(id)
 );
 ```
 
@@ -352,12 +352,12 @@ SELECT
     p.valor,
     p.data
 FROM pedidos p
-INNER JOIN clientes c ON p.cliente_id = c.id
+INNER JOIN clientes c ON p.cliente_ID = c.id
 ORDER BY p.data DESC
 ```
 
 Este é o JOIN que aparece na tela de Pedidos para exibir o **nome do cliente**
-em vez do `cliente_id` (número).
+em vez do `cliente_ID` (número).
 
 ---
 
@@ -391,7 +391,7 @@ TESTES DE PEDIDOS
 [ ] 6. Abrir tela de Pedidos → Combobox deve listar clientes do banco
 [ ] 7. Cadastrar novo pedido → verificar no banco com JOIN:
        SELECT p.id, c.nome, p.descricao, p.valor, p.data
-       FROM pedidos p INNER JOIN clientes c ON p.cliente_id = c.id;
+       FROM pedidos p INNER JOIN clientes c ON p.cliente_ID = c.id;
 [ ] 8. Listar pedidos → tabela deve exibir NOME do cliente (não ID)
 [ ] 9. Editar pedido → salvar e verificar alteração no banco
 [  ] 10. Excluir pedido → confirmar remoção no banco

@@ -247,7 +247,7 @@ class PedidoView(ttk.Frame):
         self._mapa_clientes = {c["nome"]: c["id"] for c in clientes}
         self.combo_cliente["values"] = list(self._mapa_clientes.keys())
 
-    def obter_cliente_id_selecionado(self) -> Optional[int]:
+    def obter_clientes_id_selecionado(self) -> Optional[int]:
         """
         Retorna o ID do cliente escolhido no Combobox.
 
@@ -261,7 +261,7 @@ class PedidoView(ttk.Frame):
         Lê e retorna os valores preenchidos no formulário.
 
         Returns:
-            dict: Chaves 'id', 'cliente_nome', 'cliente_id',
+            dict: Chaves 'id', 'cliente_nome', 'clientes_ID',
                   'descricao', 'valor', 'data'.
         """
         data_val = self.entry_data.get()
@@ -271,7 +271,7 @@ class PedidoView(ttk.Frame):
         return {
             "id":           self.entry_id.get().strip(),
             "cliente_nome": self.combo_cliente.get().strip(),
-            "cliente_id":   self.obter_cliente_id_selecionado(),
+            "clientes_ID":   self.obter_clientes_id_selecionado(),
             "descricao":    self.entry_descricao.get().strip(),
             "valor":        self.entry_valor.get().strip(),
             "data":         data_val.strip(),

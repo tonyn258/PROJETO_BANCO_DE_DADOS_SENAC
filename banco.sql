@@ -254,7 +254,7 @@ INSERT INTO tb_clientes (nome, email, telefone) VALUES
 
 -- PEDIDOS
 
-INSERT INTO tb_pedidos (cliente_id, descricao, valor, data) VALUES
+INSERT INTO tb_pedidos (cliente_ID, descricao, valor, data) VALUES
 (1, 'Notebook Dell Inspiron i5', 3500.00, '2025-06-01'),
 (2, 'Mouse Gamer Logitech G203', 120.00, '2025-06-02'),
 (3, 'Teclado Mecânico Redragon Kumara', 250.00, '2025-06-03'),
