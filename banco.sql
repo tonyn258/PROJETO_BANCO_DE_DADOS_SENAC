@@ -239,44 +239,42 @@ CREATE TABLE tb_pedidos (
 -- CLIENTES
 
 INSERT INTO tb_clientes (nome, email, telefone) VALUES
-('João Silva', 'joao@email.com', '(35)99999-1001'),
-('Maria Souza', 'maria@email.com', '(35)99999-1002'),
-('Pedro Santos', 'pedro@email.com', '(35)99999-1003'),
-('Ana Oliveira', 'ana@email.com', '(35)99999-1004'),
-('Carlos Lima', 'carlos@email.com', '(35)99999-1005'),
-('Fernanda Costa', 'fernanda@email.com', '(35)99999-1006'),
-('Lucas Rocha', 'lucas@email.com', '(35)99999-1007'),
-('Juliana Alves', 'juliana@email.com', '(35)99999-1008'),
-('Ricardo Gomes', 'ricardo@email.com', '(35)99999-1009'),
-('Patricia Martins', 'patricia@email.com', '(35)99999-1010');
+('Mercado São José', 'contato1@alfa.com', '(35)99999-0001'),
+('Padaria Primavera', 'contato2@alfa.com', '(35)99999-0002'),
+('Empório Mineiro', 'contato3@alfa.com', '(35)99999-0003'),
+...
+('Lanchonete Nova Era', 'contato320@alfa.com', '(35)99999-0320');
 
 
 
 -- PEDIDOS
 
 INSERT INTO tb_pedidos (cliente_ID, descricao, valor, data) VALUES
-(1, 'Notebook Dell Inspiron i5', 3500.00, '2025-06-01'),
-(2, 'Mouse Gamer Logitech G203', 120.00, '2025-06-02'),
-(3, 'Teclado Mecânico Redragon Kumara', 250.00, '2025-06-03'),
-(4, 'Monitor LG 24 Polegadas', 899.90, '2025-06-04'),
-(5, 'SSD Kingston 1TB', 420.00, '2025-06-05'),
-(6, 'Memória RAM DDR4 16GB', 280.00, '2025-06-06'),
-(7, 'Placa de Vídeo RTX 4060', 2450.00, '2025-06-07'),
-(8, 'Processador Ryzen 5 5600', 850.00, '2025-06-08'),
-(9, 'Fonte Corsair 650W', 430.00, '2025-06-09'),
-(10, 'Gabinete Gamer RGB', 320.00, '2025-06-10'),
-(1, 'Webcam Full HD Logitech', 210.00, '2025-06-11'),
-(2, 'Headset HyperX Cloud', 390.00, '2025-06-12'),
-(3, 'Impressora Epson EcoTank', 1350.00, '2025-06-13'),
-(4, 'HD Externo Seagate 2TB', 520.00, '2025-06-14'),
-(5, 'Switch TP-Link 8 Portas', 180.00, '2025-06-15'),
-(6, 'Roteador Wi-Fi 6', 450.00, '2025-06-16'),
-(7, 'Notebook Lenovo IdeaPad', 4200.00, '2025-06-17'),
-(8, 'Monitor Gamer AOC 27"', 1499.90, '2025-06-18'),
-(9, 'Kit Teclado e Mouse Sem Fio', 180.00, '2025-06-19'),
-(10, 'Cadeira Gamer ThunderX3', 1299.90, '2025-06-20');
+(12, 'Compra de refrigerantes', 180.50, '2023-01-10'),
+(45, 'Compra de doces', 320.00, '2023-01-18'),
+...
+(287, 'Compra de produtos diversos', 4875.90, '2025-12-22');
 
 --visualizar os registros
 SELECT * FROM tb_clientes;
 
 SELECT * FROM tb_pedidos;
+
+--Atualizar os pedidos
+UPDATE tb_pedidos
+SET id_cliente = CASE id_cliente
+    WHEN 5 THEN 1
+    WHEN 6 THEN 2
+END;
+
+--Atualizar os clientes
+
+UPDATE tb_clientes
+SET id_cliente = CASE id_cliente
+    WHEN 5 THEN 1
+    WHEN 6 THEN 2
+END;
+
+--Ajustar o AUTO_INCREMENT
+ALTER TABLE tb_clientes AUTO_INCREMENT = 3;
+ALTER TABLE tb_pedidos AUTO_INCREMENT = 4;

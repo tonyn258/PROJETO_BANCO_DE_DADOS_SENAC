@@ -3,6 +3,7 @@
 # Antônio
 # Leonardo
 # Julinha
+# Victor Gabriel
 #####################################################################
 
 # =============================================================================
@@ -68,6 +69,10 @@ class PedidoModel:
         self.valor = valor
         self.data = data
 
+    # =========================================================================
+    # METODO SALVAR
+    # =========================================================================
+
     def salvar(self) -> bool:
         """
         Persiste um novo pedido no banco de dados.
@@ -101,6 +106,10 @@ class PedidoModel:
         db.fechar_conexao()
 
         return True
+    
+    # =========================================================================
+    # METODO LISTAR
+    # =========================================================================
 
     def listar(self) -> List[Dict[str, Any]]:
         """
@@ -137,8 +146,11 @@ class PedidoModel:
                 "data": str(r[4])
             }
             for r in registros
-        ]
-    
+        ]    
+
+    # =========================================================================
+    # METODO ATUALIZAR
+    # =========================================================================
 
     def atualizar(self) -> bool:
         """
@@ -172,6 +184,10 @@ class PedidoModel:
         db.fechar_conexao()
 
         return True
+    
+    # =========================================================================
+    # METODO EXCLUIR
+    # =========================================================================
 
     def excluir(self) -> bool:
         """
@@ -196,6 +212,11 @@ class PedidoModel:
         return True
 
     #def listar_por_cliente(self, clientes_ID: int) -> List[Dict[str, Any]]:
+
+    # =========================================================================
+    # METODO BUSCAR
+    # =========================================================================
+
     def buscar_por_id(self, id: int):
         """
         Retorna todos os pedidos de um cliente específico.

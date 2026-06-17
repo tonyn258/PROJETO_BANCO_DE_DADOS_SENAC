@@ -1,3 +1,11 @@
+####################################################################
+# Grupo 2 - 
+# Antônio
+# Leonardo
+# Julinha
+# Victor Gabriel
+#####################################################################
+
 # =============================================================================
 # ARQUIVO: controller/cliente_controller.py
 #
@@ -76,7 +84,7 @@ class ClienteController:
 
     # =========================================================================
     # Inicialização
-    # =========================================================================
+    # =========================================================================    
 
     def _vincular_eventos(self) -> None:
         """
@@ -95,6 +103,10 @@ class ClienteController:
             ao_excluir=self._ao_clicar_excluir,
             ao_limpar=self._ao_clicar_limpar,
         )
+
+    # =========================================================================
+    # METODO CARREGAR DADOS
+    # =========================================================================
 
     def _carregar_dados(self) -> None:
         """
@@ -138,6 +150,10 @@ class ClienteController:
             "email":    valores[2],
             "telefone": valores[3],
         })
+
+    # =========================================================================
+    # METODO AO CLICAR NOVO
+    # =========================================================================
 
     def _ao_clicar_novo(self) -> None:
         """Limpa o formulário para inserção de um novo cliente."""
@@ -378,6 +394,9 @@ class ClienteController:
                 "erro"
             )
 
+    # =========================================================================
+    # METODO LIMPAR 
+    # =========================================================================
     def _ao_clicar_limpar(self) -> None:
         """Limpa o formulário sem alterar dados."""
         self.view.limpar_formulario()
@@ -402,9 +421,9 @@ class ClienteController:
         # TODO (Alunos): substituir por self.model.listar()
         return [{"id": c[0], "nome": c[1]} for c in CLIENTES_MOCK]
 
-    # =====================================================
-    # MÉTODO BUSCAR CLIENTE POR ID
-    # =====================================================
+# =====================================================
+# MÉTODO BUSCAR CLIENTE POR ID
+# =====================================================
 
     def buscar_cliente_por_id(self, id_cliente):
         """
